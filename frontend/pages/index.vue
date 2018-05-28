@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <v-progress-linear :indeterminate="true" v-if="!tweets"></v-progress-linear>
-    <home :tweets="tweets" v-if="tweets"></home>
-  </div>
+  <home :tweets="tweets"></home>
 </template>
 
 <script>
@@ -14,15 +11,16 @@ export default {
   components: {
     home
   },
+  asyncData() {
+    return AppApi.list_tweets().then(result => {
+      return {
+        tweets: result.data
+      }
+    })
+  },
   data () {
     return {
-      tweets: null,
     }
-  },
-  mounted() {
-    AppApi.list_tweets().then(result => {
-      this.tweets = result.data
-    })
   }
 }
 </script>
