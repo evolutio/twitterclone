@@ -27,6 +27,8 @@ def login(request):
 
 
 def logout(request):
+    if request.method.lower() != 'post':
+        raise Exception('Logout only via post')
     if request.user.is_authenticated():
         log_svc.log_logout(request.user)
     auth.logout(request)
@@ -51,6 +53,20 @@ def add_todo(request):
 def list_todos(request):
     todos = todo_svc.list_todos()
     return JsonResponse({'todos': todos})
+
+
+def list_tweets(request):
+    tweets = [
+        {
+            'id': 1,
+            'author_name': 'Isaac Newton',
+            'author_username': '@isaacnewton',
+            'author_avatar': 'http://1.bp.blogspot.com/-A9_ROvP0efw/TZI9dUsXAKI/AAAAAAAAGCI/rD_-a3ZBF3U/s1600/Isaac_Newton_Biography%255B1%255D.jpg',
+            'created_at': '43 min',
+            'text': 'A tendência dos corpos, quando nenhuma força é exercida sobre eles, é permanecer em seu estado natural, ou seja, repouso ou movimento retilíneo e uniforme.'
+        }
+    ]
+    return JsonResponse(tweets, safe=False)
 
 
 def _user2dict(user):
