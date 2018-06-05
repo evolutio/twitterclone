@@ -30,7 +30,11 @@ const api = {
     },
     unfollow(username) {
         return post('/api/unfollow', {username: username})
+    },
+    tweet(text) {
+        return post('/api/tweet', {text: text})  // TODO: Tony burro: esqueceu de fazer isso
     }
+
 }
 export default api;
 
