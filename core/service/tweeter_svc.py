@@ -1,16 +1,23 @@
+from core.models import Seguindo, Tweet, User
+
+
 def follow(user, username):
-    pass
+    userpara = User.objects.get(username=username)
+    if Seguindo.objects.filter(de=user, para=userpara).count() == 0:
+        Seguindo.objects.create(de=user, para=userpara)
 
 
 def unfollow(user, username):
-    pass
+    userpara = User.objects.get(username=username)
+    Seguindo.objects.filter(de=user, para=userpara).delete()
 
 
 def tweet(user, text):
-    pass
+    Tweet.objects.create(user=user, text=text)
 
 
 def list_tweets(user):
+    # TODO: fica pra proxima.
     return [
         {
             'id': 1,

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class ActivityLog(models.Model):
     type = models.CharField(max_length=64)
     logged_user = models.ForeignKey(User, null=True, blank=True)
@@ -19,13 +20,15 @@ class ActivityLog(models.Model):
         )
 
 
-class Todo(models.Model):
-    description = models.CharField(max_length=512)
-    done = models.BooleanField(default=False)
+class Seguindo(models.Model):
+    de = models.ForeignKey(User, related_name='seguindo_de')
+    para = models.ForeignKey(User, related_name='seguindo_para')
 
-    def to_dict_json(self):
-        return {
-            'id': self.id,
-            'description': self.description,
-            'done': self.done,
-        }
+    class Meta:
+        unique_together = ('de', 'para',)
+
+
+class Tweet(models.Model):
+    user = models.ForeignKey(User)
+    text = models.CharField(max_length=512)
+    created_at = models.DateTimeField(auto_now_add=True)
