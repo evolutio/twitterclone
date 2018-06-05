@@ -7,6 +7,15 @@
       </v-container>
     </v-content>
     <le-footer/>
+    <v-snackbar
+      :timeout="snack.timeout"
+      :color="snack.color"
+      bottom
+      v-model="snack.visible"
+    >
+      {{snack.text}}
+      <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -26,6 +35,11 @@
       layout: {
         drawer: true,
       },
-    })
+    }),
+    computed: {
+      snack () {
+        return this.$store.getters.snack
+      }
+    }
   }
 </script>
