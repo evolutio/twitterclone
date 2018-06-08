@@ -32,3 +32,13 @@ class Tweet(models.Model):
     user = models.ForeignKey(User)
     text = models.CharField(max_length=512)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def to_dict_json(self):
+        return {
+            'id': self.id,
+            'author_name': self.user.first_name,
+            'author_username': self.user.username,
+            'author_avatar': 'TODO',  # TODO: depois a gente ve
+            'created_at': self.created_at.isoformat(),
+            'text': self.text,
+        }

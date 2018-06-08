@@ -44,7 +44,9 @@ def whoami(request):
 
 
 def list_tweets(request):
-    tweets = tweeter_svc.list_tweets(request.user)
+    loggeduser = request.user if request.user.is_authenticated() else None
+    username = request.GET.get('username')
+    tweets = tweeter_svc.list_tweets(loggeduser, username)
     return JsonResponse(tweets, safe=False)
 
 

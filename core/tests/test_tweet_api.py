@@ -36,6 +36,9 @@ class TestTweetsApi(TestCase):
         self._assert_tweets_home(descartes, [])
         self._assert_tweets_home(newton, [PENSOLOGO])
         self._assert_tweets_home(einstein, [GRAVITACAO, PRIMEIRALEI, PENSOLOGO])
+        self._assert_tweets_home(anon, [INSANIDADE, 'E = mc2', GRAVITACAO, PRIMEIRALEI, PENSOLOGO])
+        self._assert_tweets_user(anon, '@einstein', [INSANIDADE, 'E = mc2'])
+        self._assert_tweets_user(newton, '@einstein', [INSANIDADE, 'E = mc2'])
 
     def _follow(self, client, username):
         r = client.post('/api/follow', {'username': username})
@@ -61,3 +64,11 @@ class TestTweetsApi(TestCase):
         tweets = json.loads(r.content.decode('utf-8'))
         actualtweet_texts = [t['text'] for t in tweets]
         self.assertEquals(actualtweet_texts, expectedtweets)
+
+    def _assert_tweets_user(self, client, username, expectedtweets):
+        r = client.get('/api/list_tweets', {'username': username})
+        self.assertEquals(200, r.status_code)
+        tweets = json.loads(r.content.decode('utf-8'))
+        actualtweet_texts = [t['text'] for t in tweets]
+        self.assertEquals(actualtweet_texts, expectedtweets)
+

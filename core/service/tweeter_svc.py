@@ -16,15 +16,13 @@ def tweet(user, text):
     Tweet.objects.create(user=user, text=text)
 
 
-def list_tweets(user):
-    # TODO: fica pra proxima.
-    return [
-        {
-            'id': 1,
-            'author_name': 'Isaac Newton',
-            'author_username': '@isaacnewton',
-            'author_avatar': 'http://1.bp.blogspot.com/-A9_ROvP0efw/TZI9dUsXAKI/AAAAAAAAGCI/rD_-a3ZBF3U/s1600/Isaac_Newton_Biography%255B1%255D.jpg',
-            'created_at': '43 min',
-            'text': 'A tendência dos corpos, quando nenhuma força é exercida sobre eles, é permanecer em seu estado natural, ou seja, repouso ou movimento retilíneo e uniforme.'
-        }
-    ]
+def list_tweets(loggeduser, username):
+    if username:
+        tweets = Tweet.objects.filter(user__username=username)
+    else:
+        if loggeduser:
+            tweets = Tweet.objects.filter(user__in=User.objects.filter(seguindo_para__de=loggeduser))
+        else:
+            tweets = Tweet.objects.all()
+    tweets = tweets.order_by('-created_at')
+    return [t.to_dict_json() for t in tweets]
