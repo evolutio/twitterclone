@@ -59,6 +59,16 @@ const api = {
         ifollow: true
       })
     },
+    tweet(text) {
+      return mockasync({
+        id: 1000,
+        author_name: logged_user.username,
+        author_username: logged_user.username,
+        author_avatar: 'http://1.bp.blogspot.com/-A9_ROvP0efw/TZI9dUsXAKI/AAAAAAAAGCI/rD_-a3ZBF3U/s1600/Isaac_Newton_Biography%255B1%255D.jpg',
+        created_at: new Date().toISOString(),
+        text: text
+      })
+    },
     follow (username) {
       return mockasync({})
     },
