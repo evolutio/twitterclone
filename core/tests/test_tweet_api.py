@@ -33,9 +33,9 @@ class TestTweetsApi(TestCase):
         self._tweet(newton, GRAVITACAO)
         self._tweet(einstein, 'E = mc2')
         self._tweet(einstein, INSANIDADE)
-        self._assert_tweets_home(descartes, [])
-        self._assert_tweets_home(newton, [PENSOLOGO])
-        self._assert_tweets_home(einstein, [GRAVITACAO, PRIMEIRALEI, PENSOLOGO])
+        self._assert_tweets_home(descartes, [PENSOLOGO])
+        self._assert_tweets_home(newton, [GRAVITACAO, PRIMEIRALEI, PENSOLOGO])
+        self._assert_tweets_home(einstein, [INSANIDADE, 'E = mc2', GRAVITACAO, PRIMEIRALEI, PENSOLOGO])
         self._assert_tweets_home(anon, [INSANIDADE, 'E = mc2', GRAVITACAO, PRIMEIRALEI, PENSOLOGO])
         self._assert_tweets_user(anon, '@einstein', [INSANIDADE, 'E = mc2'])
         self._assert_tweets_user(newton, '@einstein', [INSANIDADE, 'E = mc2'])
@@ -55,8 +55,9 @@ class TestTweetsApi(TestCase):
     def _tweet(self, client, text):
         r = client.post('/api/tweet', {'text': text})
         self.assertEquals(200, r.status_code)
-        data = json.loads(r.content.decode('utf-8'))
-        self.assertIsNotNone(data)
+        tweet = json.loads(r.content.decode('utf-8'))
+        self.assertIsNotNone(tweet['id'])
+        self.assertEquals(text, tweet['text'])
 
     def _assert_tweets_home(self, client, expectedtweets):
         r = client.get('/api/list_tweets')
